@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Khodam Finder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Work Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: #f8f8f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      font-size: 1.1em;
+      font-style: italic;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    input, button {
+      padding: 12px 16px;
+      font-size: 1em;
+      border: none;
+      border-radius: 10px;
+      margin: 8px 5px;
+      outline: none;
+    }
+
+    input {
+      width: 250px;
+      max-width: 80%;
+      background-color: #fff;
+      color: #000;
+    }
+
+    button {
+      background-color: #f0a500;
+      color: #000;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ffcc00;
+    }
+
+    .result {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #warning {
+      margin-top: 10px;
+      color: #ffbaba;
+      font-style: italic;
+      font-size: 0.95em;
+    }
+
+    #resetButton {
+      background-color: #ccc;
+      margin-top: 20px;
+    }
+
+    #resetButton:hover {
+      background-color: #eee;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Hai! Gak Ada Internet ya???</h1>
+  <p class="subtitle">Masukkan nama kamu untuk mengetahui Khodam-mu</p>
+
+  <div id="inputSection">
+    <input type="text" id="nameInput" placeholder="Masukkan nama...">
+    <button onclick="generateKhodam()">Lihat Pesan</button>
+    <div id="warning" class="hidden">1 orang 1 khodam ya bes 🙅‍♂️</div>
+  </div>
+
+  <div class="result hidden" id="outputResult"></div>
+  <button id="resetButton" class="hidden" onclick="resetKhodam()">Reset</button>
+
+  <script>
+    const khodams = [
+      "Mbah Gimbal Angin", "Ki Semprit Seribu Bayangan", "Roro Nyebur Sumur",
+      "Nyai Meringis Malam Jumat", "Kanjeng Dukun Baperan", "Mbah Kenthir Jaya",
+      "Kang Brotoseno Galau", "Eyang Sableng Sore Hari", "Dewa Kentut Halilintar",
+      "Ki Banyu Nyeleneh", "Nyai Melotot 100 Watt", "Kiai Kopi Pait", "Jin Kurang Tidur",
+      "Pangeran Terlambat Subuh", "Hantu Setrika Dingin", "Mbah Lupa Password",
+      "Nyai Kerudung Terbang", "Ki Sabuk Ketat", "Dukun Wifi Lemot", "Jin Ngopi Sendirian",
+      "Eyang Oplas Spiritual", "Ki Cemilan Tengah Malam", "Nyai Kasur Menyala",
+      "Sultan Mistis Rebahan", "Kiai Dilan Gaib", "Jin Tugas Menumpuk", "Jin Anti Mager",
+      "Jin Tukang Lembur", "Jin Pelindung Tugas Akhir", "Jin Mood Booster",
+      "Jin Si Tukang Scroll TikTok", "Jin Sering Ketinggalan Zoom", "Jin Anti Galau",
+      "Jin Penyemangat Ujian"
+    ];
+
+    function getRandomKhodam(name) {
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) {
+        hash += name.charCodeAt(i);
+      }
+      return khodams[hash % khodams.length];
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function generateKhodam() {
+      const storedName = localStorage.getItem("khodamUser");
+      if (storedName) {
+        document.getElementById("warning").classList.remove("hidden");
+        return;
+      }
+
+      const input = document.getElementById("nameInput");
+      const name = input.value.trim().toLowerCase();
+      if (!name) return;
+
+      const khodam = getRandomKhodam(name);
+      const result = `Hai ${capitalize(name)}, khodam kamu adalah ${khodam}`;
+
+      document.getElementById("outputResult").textContent = result;
+      document.getElementById("outputResult").classList.remove("hidden");
+      document.getElementById("resetButton").classList.remove("hidden");
+      document.getElementById("inputSection").classList.add("hidden");
+
+      localStorage.setItem("khodamUser", name);
+    }
+
+    function resetKhodam() {
+      localStorage.removeItem("khodamUser");
+      location.reload();
+    }
+
+    window.onload = () => {
+      const storedName = localStorage.getItem("khodamUser");
+      if (storedName) {
+        const khodam = getRandomKhodam(storedName);
+        const result = `Hai ${capitalize(storedName)}, khodam kamu adalah... ${khodam}`;
+        document.getElementById("outputResult").textContent = result;
+        document.getElementById("outputResult").classList.remove("hidden");
+        document.getElementById("resetButton").classList.remove("hidden");
+        document.getElementById("inputSection").classList.add("hidden");
+      }
+    };
+  </script>
+</body>
+
+</html>
